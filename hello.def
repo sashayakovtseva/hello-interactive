@@ -1,0 +1,25 @@
+Bootstrap: docker
+From: golang:alpine
+Stage: builder
+
+%post
+apk update
+apk add git && apk add ca-certificates
+git clone https://github.com/sashayakovtseva/hello-interactive
+cd hello-interactive
+go build --ldflags '-linkmode "external" -extldflags "-static"' -o hello main.go
+
+Bootstrap: library
+From: library/default/busybox:1.28
+Stage: two
+
+%files from builder
+/etc/ssl/certs/ca-certificates.crt
+/etc/passwd
+/hello-interactive/hello /
+
+%runscript
+exec /hello ""
+
+%startscript
+exec /hello ""

@@ -10,7 +10,7 @@ apk update
 apk add git && apk add ca-certificates
 git clone https://github.com/sashayakovtseva/hello-interactive
 cd hello-interactive
-go build --ldflags '-linkmode "external" -extldflags "-static"' -o hello main.go
+CGO_ENABLED=off go build -o hello main.go
 
 Bootstrap: library
 From: library/default/busybox:1.28
@@ -22,7 +22,7 @@ Stage: two
 /hello-interactive/hello /
 
 %runscript
-exec /hello ""
+exec /hello "$@"
 
 %startscript
-exec /hello ""
+exec /hello "$@"

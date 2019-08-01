@@ -3,6 +3,9 @@ From: golang:alpine
 Stage: builder
 
 %post
+export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/usr/local/go/bin:/home/vagrant/go/bin:/usr/local/go/bin
+export HOME=/root
+
 apk update
 apk add git && apk add ca-certificates
 git clone https://github.com/sashayakovtseva/hello-interactive

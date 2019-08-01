@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"flag"
 	"fmt"
 	"log"
 	"os"
@@ -10,8 +11,17 @@ import (
 	"time"
 )
 
+var interval = flag.String("interval", "1m", "Interval between output, should be parsable by time.ParseDuration")
+
 func main() {
-	ticker := time.NewTicker(time.Minute)
+	flag.Parse()
+
+	d, err := time.ParseDuration(*interval)
+	if err != nil {
+		log.Fatalf("Could not parse output interval: %v", err)
+	}
+
+	ticker := time.NewTicker(d)
 	sigs := make(chan os.Signal, 1)
 	signal.Notify(sigs, syscall.SIGTERM, syscall.SIGINT)
 
